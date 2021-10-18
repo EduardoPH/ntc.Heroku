@@ -1,10 +1,10 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class infoa_enl_chat extends Model {
+export default class infoa_gab_endereco extends Model {
   static init(sequelize, DataTypes) {
   super.init({
-    id_chat: {
+    id_endereco: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -14,21 +14,29 @@ export default class infoa_enl_chat extends Model {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    id_chat_usuario: {
+    nm_bairro: {
+      type: DataTypes.STRING(255),
+      allowNull: false
+    },
+    nm_rua: {
+      type: DataTypes.STRING(255),
+      allowNull: false
+    },
+    nr_numero_rua: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    ds_mensagem: {
-      type: DataTypes.STRING(100),
+    ds_cep: {
+      type: DataTypes.STRING(255),
       allowNull: false
     },
-    dt_mensagem: {
-      type: DataTypes.DATE,
+    ds_complemento: {
+      type: DataTypes.STRING(255),
       allowNull: false
     }
   }, {
     sequelize,
-    tableName: 'infoa_enl_chat',
+    tableName: 'infoa_gab_endereco',
     timestamps: false,
     indexes: [
       {
@@ -36,25 +44,18 @@ export default class infoa_enl_chat extends Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id_chat" },
+          { name: "id_endereco" },
         ]
       },
       {
-        name: "id_usuario",
+        name: "infoa_gab_endereco_fk0",
         using: "BTREE",
         fields: [
           { name: "id_usuario" },
         ]
       },
-      {
-        name: "id_chat_usuario",
-        using: "BTREE",
-        fields: [
-          { name: "id_chat_usuario" },
-        ]
-      },
     ]
   });
-  return infoa_enl_chat;
+  return infoa_gab_endereco;
   }
 }

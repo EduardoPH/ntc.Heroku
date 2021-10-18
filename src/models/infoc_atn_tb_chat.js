@@ -1,7 +1,7 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class infoa_enl_chat extends Model {
+export default class infoc_atn_tb_chat extends Model {
   static init(sequelize, DataTypes) {
   super.init({
     id_chat: {
@@ -10,25 +10,25 @@ export default class infoa_enl_chat extends Model {
       allowNull: false,
       primaryKey: true
     },
-    id_usuario: {
+    id_sala: {
       type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    id_chat_usuario: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     ds_mensagem: {
-      type: DataTypes.STRING(100),
-      allowNull: false
+      type: DataTypes.STRING(255),
+      allowNull: true
     },
     dt_mensagem: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
+    },
+    tp_enviado_por: {
+      type: DataTypes.STRING(100),
+      allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'infoa_enl_chat',
+    tableName: 'infoc_atn_tb_chat',
     timestamps: false,
     indexes: [
       {
@@ -40,21 +40,14 @@ export default class infoa_enl_chat extends Model {
         ]
       },
       {
-        name: "id_usuario",
+        name: "id_sala",
         using: "BTREE",
         fields: [
-          { name: "id_usuario" },
-        ]
-      },
-      {
-        name: "id_chat_usuario",
-        using: "BTREE",
-        fields: [
-          { name: "id_chat_usuario" },
+          { name: "id_sala" },
         ]
       },
     ]
   });
-  return infoa_enl_chat;
+  return infoc_atn_tb_chat;
   }
 }

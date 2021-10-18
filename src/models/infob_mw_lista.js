@@ -1,10 +1,10 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class infoa_enl_chat extends Model {
+export default class infob_mw_lista extends Model {
   static init(sequelize, DataTypes) {
   super.init({
-    id_chat: {
+    id_lista: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -12,23 +12,19 @@ export default class infoa_enl_chat extends Model {
     },
     id_usuario: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
-    id_chat_usuario: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+    nm_lista: {
+      type: DataTypes.STRING(255),
+      allowNull: true
     },
-    ds_mensagem: {
-      type: DataTypes.STRING(100),
-      allowNull: false
-    },
-    dt_mensagem: {
-      type: DataTypes.DATE,
-      allowNull: false
+    ds_descricao: {
+      type: DataTypes.STRING(255),
+      allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'infoa_enl_chat',
+    tableName: 'infob_mw_lista',
     timestamps: false,
     indexes: [
       {
@@ -36,7 +32,7 @@ export default class infoa_enl_chat extends Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id_chat" },
+          { name: "id_lista" },
         ]
       },
       {
@@ -46,15 +42,8 @@ export default class infoa_enl_chat extends Model {
           { name: "id_usuario" },
         ]
       },
-      {
-        name: "id_chat_usuario",
-        using: "BTREE",
-        fields: [
-          { name: "id_chat_usuario" },
-        ]
-      },
     ]
   });
-  return infoa_enl_chat;
+  return infob_mw_lista;
   }
 }

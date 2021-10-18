@@ -1,10 +1,10 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class infoa_enl_chat extends Model {
+export default class infod_tif_comentario extends Model {
   static init(sequelize, DataTypes) {
   super.init({
-    id_chat: {
+    id_comentario: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -14,21 +14,25 @@ export default class infoa_enl_chat extends Model {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    id_chat_usuario: {
+    id_anime: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    ds_mensagem: {
-      type: DataTypes.STRING(100),
+    ds_comentario: {
+      type: DataTypes.STRING(255),
       allowNull: false
     },
-    dt_mensagem: {
+    dt_comentario: {
       type: DataTypes.DATE,
+      allowNull: false
+    },
+    id_like: {
+      type: DataTypes.INTEGER,
       allowNull: false
     }
   }, {
     sequelize,
-    tableName: 'infoa_enl_chat',
+    tableName: 'infod_tif_comentario',
     timestamps: false,
     indexes: [
       {
@@ -36,7 +40,7 @@ export default class infoa_enl_chat extends Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id_chat" },
+          { name: "id_comentario" },
         ]
       },
       {
@@ -47,14 +51,14 @@ export default class infoa_enl_chat extends Model {
         ]
       },
       {
-        name: "id_chat_usuario",
+        name: "id_anime",
         using: "BTREE",
         fields: [
-          { name: "id_chat_usuario" },
+          { name: "id_anime" },
         ]
       },
     ]
   });
-  return infoa_enl_chat;
+  return infod_tif_comentario;
   }
 }

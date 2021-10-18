@@ -1,34 +1,34 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class infoa_enl_chat extends Model {
+export default class infoa_gab_venda_item extends Model {
   static init(sequelize, DataTypes) {
   super.init({
-    id_chat: {
+    id_venda_item: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    id_usuario: {
+    id_produto: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    id_chat_usuario: {
+    id_venda: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    ds_mensagem: {
-      type: DataTypes.STRING(100),
+    qtd_produtos: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
-    dt_mensagem: {
-      type: DataTypes.DATE,
+    vl_preco: {
+      type: DataTypes.DECIMAL(15,2),
       allowNull: false
     }
   }, {
     sequelize,
-    tableName: 'infoa_enl_chat',
+    tableName: 'infoa_gab_venda_item',
     timestamps: false,
     indexes: [
       {
@@ -36,25 +36,25 @@ export default class infoa_enl_chat extends Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id_chat" },
+          { name: "id_venda_item" },
         ]
       },
       {
-        name: "id_usuario",
+        name: "infoa_gab_venda_item_fk0",
         using: "BTREE",
         fields: [
-          { name: "id_usuario" },
+          { name: "id_produto" },
         ]
       },
       {
-        name: "id_chat_usuario",
+        name: "infoa_gab_venda_item_fk1",
         using: "BTREE",
         fields: [
-          { name: "id_chat_usuario" },
+          { name: "id_venda" },
         ]
       },
     ]
   });
-  return infoa_enl_chat;
+  return infoa_gab_venda_item;
   }
 }

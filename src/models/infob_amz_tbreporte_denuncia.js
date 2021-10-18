@@ -1,10 +1,10 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class infoa_enl_chat extends Model {
+export default class infob_amz_tbreporte_denuncia extends Model {
   static init(sequelize, DataTypes) {
   super.init({
-    id_chat: {
+    id_reporte_denuncia: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -12,23 +12,27 @@ export default class infoa_enl_chat extends Model {
     },
     id_usuario: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
-    id_chat_usuario: {
+    id_denuncia: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
-    ds_mensagem: {
-      type: DataTypes.STRING(100),
-      allowNull: false
-    },
-    dt_mensagem: {
+    dt_reporte: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
+    },
+    ds_motivo_reporte: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    ds_confirmado: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'infoa_enl_chat',
+    tableName: 'infob_amz_tbreporte_denuncia',
     timestamps: false,
     indexes: [
       {
@@ -36,7 +40,7 @@ export default class infoa_enl_chat extends Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id_chat" },
+          { name: "id_reporte_denuncia" },
         ]
       },
       {
@@ -47,14 +51,14 @@ export default class infoa_enl_chat extends Model {
         ]
       },
       {
-        name: "id_chat_usuario",
+        name: "id_denuncia",
         using: "BTREE",
         fields: [
-          { name: "id_chat_usuario" },
+          { name: "id_denuncia" },
         ]
       },
     ]
   });
-  return infoa_enl_chat;
+  return infob_amz_tbreporte_denuncia;
   }
 }

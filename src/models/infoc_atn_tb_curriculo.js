@@ -1,34 +1,30 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class infoa_enl_chat extends Model {
+export default class infoc_atn_tb_curriculo extends Model {
   static init(sequelize, DataTypes) {
   super.init({
-    id_chat: {
+    id_curriculo: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    id_usuario: {
+    id_pessoal: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
-    id_chat_usuario: {
+    id_vaga: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
-    ds_mensagem: {
+    ds_curriculo: {
       type: DataTypes.STRING(100),
-      allowNull: false
-    },
-    dt_mensagem: {
-      type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'infoa_enl_chat',
+    tableName: 'infoc_atn_tb_curriculo',
     timestamps: false,
     indexes: [
       {
@@ -36,25 +32,25 @@ export default class infoa_enl_chat extends Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id_chat" },
+          { name: "id_curriculo" },
         ]
       },
       {
-        name: "id_usuario",
+        name: "id_pessoal",
         using: "BTREE",
         fields: [
-          { name: "id_usuario" },
+          { name: "id_pessoal" },
         ]
       },
       {
-        name: "id_chat_usuario",
+        name: "id_vaga",
         using: "BTREE",
         fields: [
-          { name: "id_chat_usuario" },
+          { name: "id_vaga" },
         ]
       },
     ]
   });
-  return infoa_enl_chat;
+  return infoc_atn_tb_curriculo;
   }
 }

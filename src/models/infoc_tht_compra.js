@@ -1,34 +1,30 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class infoa_enl_chat extends Model {
+export default class infoc_tht_compra extends Model {
   static init(sequelize, DataTypes) {
   super.init({
-    id_chat: {
+    id_compra: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
+    id_pacote: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
     id_usuario: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
-    id_chat_usuario: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    ds_mensagem: {
-      type: DataTypes.STRING(100),
-      allowNull: false
-    },
-    dt_mensagem: {
-      type: DataTypes.DATE,
-      allowNull: false
+    ds_aprovacao: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'infoa_enl_chat',
+    tableName: 'infoc_tht_compra',
     timestamps: false,
     indexes: [
       {
@@ -36,7 +32,14 @@ export default class infoa_enl_chat extends Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id_chat" },
+          { name: "id_compra" },
+        ]
+      },
+      {
+        name: "id_pacote",
+        using: "BTREE",
+        fields: [
+          { name: "id_pacote" },
         ]
       },
       {
@@ -46,15 +49,8 @@ export default class infoa_enl_chat extends Model {
           { name: "id_usuario" },
         ]
       },
-      {
-        name: "id_chat_usuario",
-        using: "BTREE",
-        fields: [
-          { name: "id_chat_usuario" },
-        ]
-      },
     ]
   });
-  return infoa_enl_chat;
+  return infoc_tht_compra;
   }
 }
