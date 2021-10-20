@@ -10,7 +10,7 @@ app.use(express.json())
 
 app.get("/administradores", async (req,resp) => {
     try{
-        let adm = await db.infoc_ntc_administrador.findAll ({order: [["id_administrador", "desc"]]})
+        let adm = await db.infoc_ntc_administrador.findAll({order: [["id_administrador", "desc"]]})
         resp.send(adm)
     }
 
@@ -19,11 +19,29 @@ app.get("/administradores", async (req,resp) => {
     }
 })
 
+app.get("/login", async(req, resp) =>{
+
+    try{
+        
+        let  email = req.body.email;
+        let  senha = req.body.senha;
+
+        let valido = await db.infoc_ntc_usuario.findOne({where: {ds_email: email, ds_senha: senha} })
+        console.log(email, senha)
+        if(!valido)
+            return resp.send({erro: "Credenciais Invalidas"})
+        else
+            return resp.sendStatus("200")
+        
+    } catch(e){
+        resp.send(e.toString())
+    }
+})
 
 
 app.get("/apoio", async (req,resp) => {
     try{
-        let apoio = await db.infoc_ntc_apoio_frase.findAll ({order: [["id_frase", "desc"]]}) 
+        let apoio = await db.infoc_ntc_apoio_frase.findAll({order: [["id_frase", "desc"]]}) 
         resp.send(apoio)
     }
 
@@ -35,7 +53,7 @@ app.get("/apoio", async (req,resp) => {
 
 app.get("/caracteristicas", async (req,resp) => {
     try{
-        let carac = await db.infoc_ntc_caracteristica_fisica.findAll ({order: [["id_fisico", "desc"]]}) 
+        let carac = await db.infoc_ntc_caracteristica_fisica.findAll({order: [["id_fisico", "desc"]]}) 
         resp.send(carac)
     }
 
@@ -79,7 +97,7 @@ app.get("/local", async (req,resp) => {
 
 app.get("/usuario", async (req,resp) => {
     try{
-        let usuario = await db.infoc_ntc_usuario.findAll ({order: [["id_usuario", "desc"]]}) 
+        let usuario = await db.infoc_ntc_usuario.findAll({order: [["id_usuario", "desc"]]}) 
         resp.send(usuario)
     }
 
