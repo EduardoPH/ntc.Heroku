@@ -5,7 +5,22 @@ const app = express();
 app.use(cors());
 app.use(express.json())
 
+app.post("/login", async(req, resp) =>{
 
+    try{
+        let { email , senha } = req.body;
+
+        let valido = await db.infoc_ntc_usuario.findOne({where: {ds_email: email, ds_senha: senha} })
+        
+        if(!valido)
+            return resp.send({erro: "Credenciais Invalidas"})
+        else
+            return resp.sendStatus("200")
+        
+    } catch(e){
+        resp.send(e.toString())
+    }
+})
 
 
 app.get("/administradores", async (req,resp) => {
@@ -16,25 +31,6 @@ app.get("/administradores", async (req,resp) => {
 
     catch(e){
         resp.send({erro: "Ocorreu um erro"})
-    }
-})
-
-app.get("/login", async(req, resp) =>{
-
-    try{
-        
-        let  email = req.body.email;
-        let  senha = req.body.senha;
-
-        let valido = await db.infoc_ntc_usuario.findOne({where: {ds_email: email, ds_senha: senha} })
-        console.log(email, senha)
-        if(!valido)
-            return resp.send({erro: "Credenciais Invalidas"})
-        else
-            return resp.sendStatus("200")
-        
-    } catch(e){
-        resp.send(e.toString())
     }
 })
 
