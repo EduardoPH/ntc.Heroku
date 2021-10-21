@@ -49,12 +49,20 @@ app.post("/login", async(req, resp) =>{
     try{
         let { email , senha } = req.body;
 
-        let valido = await db.infoc_ntc_usuario.findOne({where: {ds_email: email, ds_senha: senha} })
-        
+        let valido = await db.infoc_ntc_usuario.findOne({where: {ds_email: email, ds_senha: senha}, raw: true })
+
+        let denuncia = await db.infoc_ntc_denuncia.findAll({where:{id_usuario: valido.id_usuario}, raw: true})
+
+        delete denuncia.bt_ativo;
+
+        delete valido.ds_senha;
+
+        let r = {... valido, denuncia: denuncia}
+
         if(!valido)
              return resp.send({erro: "Credenciais Inválidas"})
         else
-             return resp.sendStatus(200)
+             return resp.send(r)
         
     } catch(e){
         resp.send(e.toString())
@@ -357,7 +365,11 @@ app.post('/denuncia', async (req,resp) => {
     try{
         let denuncia = req.body;
 
-    
+        let r = await db.infoc_ntc_caracteristica_fisica.create({
+            tp_fisico
+
+        })
+
         let d = await db.infoc_ntc_denuncia.create({
             ds_depoimento: denuncia.descricao,
             bt_ativo: false
