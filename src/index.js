@@ -1,26 +1,206 @@
 import db from './db.js';
 import express from 'express'
 import cors from 'cors'
+import enviarEmail from './email.js'
 const app = express();
 app.use(cors());
 app.use(express.json())
 
-app.post("/login", async(req, resp) =>{
+function numeroAleatorio(min, max){
+   return Math.floor(Math.random() * (max - min + 1) ) + min;
+} 
 
+app.post('/cadastrar', async (req,resp) => {
+    try{
+        let usu = req.body;
+
+        if(!usu.nome && usu.nome.length <= 4)
+            return resp.send({erro: "O nome deve ser maior que 4 Digitos"})
+
+        if(usu.email.indexOf(".") == -1 || usu.email.indexOf("@") == -1)
+            return resp.send({erro: "O E-mail deve ser valido"})
+
+        if(usu.senha.length <= 4 && !usu.senha)
+            return resp.send({erro: "A senha deve Maior que 4 digitos"})
+
+        if(usu.cpf.length <= 9 && !usu.cpf)
+            return resp.send({erro: "o CPF deve ser valido"})
+      
+        if(usu.telefone.length <= 8 && !usu.telefone)
+            return resp.send({erro: "o telefone deve ser valido"})
+
+        let r = await db.infoc_ntc_usuario.create({
+            nm_usuario: usu.nome,
+            ds_email: usu.email,
+            ds_senha: usu.senha,
+            ds_cpf: usu.cpf, 
+            ds_telefone: usu.telefone
+        })
+        
+        resp.send(r)
+
+        } catch(e) { 
+            resp.send(e.toString())
+        }
+
+})
+
+app.post("/login", async(req, resp) =>{
     try{
         let { email , senha } = req.body;
 
         let valido = await db.infoc_ntc_usuario.findOne({where: {ds_email: email, ds_senha: senha} })
         
         if(!valido)
-            return resp.send({erro: "Credenciais Invalidas"})
+             return resp.send({erro: "Credenciais Inválidas"})
         else
-            return resp.sendStatus("200")
+             return resp.sendStatus(200)
         
     } catch(e){
         resp.send(e.toString())
     }
 })
+
+app.post('/recuperacao', async(req, resp) => {
+    try {
+        const usuaria = await db.infoc_ntc_usuario.findOne({
+            where:{ds_email: req.body.email}
+        })
+    
+
+        if(!usuaria)
+            return resp.send({erro: "E-mail Inválido"})
+       
+        let numero = numeroAleatorio(1000,9999);
+        
+        await db.infoc_ntc_usuario.update(
+            {
+                ds_senha_rec: numero
+            } , { 
+                where: {id_usuario: usuaria.id_usuario}
+            }
+        )
+
+        enviarEmail(usuaria.ds_email, 'Recuperação de Senha', `
+        <h3> Recuperação de Senha </h3>
+        <p> Você solicitou a recuperação de senha da sua conta. </p>
+        <p> Entre com o código <b>${numero}</b> para prosseguir com a recuperação.
+        `)
+
+        resp.sendStatus(200)
+
+    } catch (e) {
+        resp.send(e.toString())
+    }
+})
+
+app.post('/validarCodigo', async (req, resp) => {
+    const usuaria = await db.infoc_ntc_usuario.findOne({
+      where: {
+        ds_email: req.body.email   
+      }
+    });
+  
+    if (!usuaria) {
+      resp.send({ status: 'erro', mensagem: 'E-mail inválido.' });
+    }
+  
+    if (usuaria.ds_senha_rec !== req.body.codigo) {
+      resp.send({ status: 'erro', mensagem: 'Código inválido.' });
+    }
+  
+    resp.send({ status: 'ok', mensagem: 'Código validado.' });
+  
+})
+
+
+app.put('/novaSenha', async (req, resp) => {
+    const usuaria = await db.infoc_ntc_usuario.findOne({where: {ds_email: req.body.email}});
+  
+    if (!usuaria) {
+      resp.send({ erro: 'E-mail inválido.' });
+    }
+  
+  
+    if (usuaria.ds_senha_rec !== req.body.codigo ||usuaria.ds_senha_rec === '') {
+      resp.send({erro: 'Código inválido.'});
+    }
+  
+    await db.infoc_ntc_usuario.update({
+      ds_senha: req.body.novaSenha,
+      ds_senha_rec: ''
+    }, {
+      where: { id_usuario: usuaria.id_usuario }
+    })
+  
+    resp.send('Senha alterada com sucesso.');
+  })
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 app.get("/administradores", async (req,resp) => {
@@ -203,38 +383,6 @@ app.post('/local', async (req,resp) => {
         }catch(e) { resp.send ({erro: 'Ocorreu um erro, a frase não foi cadastrada'})}
 
 })
-
-
-
-
-
-
-
-
-app.post('/usuario', async (req,resp) => {
-    try{
-        let usu = req.body;
-
-        let a = await db.infoc_ntc_usuario.findOne({where:{nm_usuario: usu.nome }})
-        if (a != null)
-           return resp.send({erro: 'Usuária já cadastrada'})
-    
-        let d = await db.infoc_ntc_usuario.create({
-            nm_usuario: usu.nome,
-            ds_email: usu.email,
-            ds_senha: usu.senha,
-            ds_cpf: usu.cpf, 
-            ds_telefone: usu.telefone
-        })
-        resp.send(d);
-        }catch(e) { resp.send ({erro: 'Ocorreu um erro, a usuária não foi cadastrada'})}
-
-})
-
-
-
-
-
 
 app.listen(process.env.PORT,
 r => console.log(`API subiu na porta ${process.env.PORT}`))
