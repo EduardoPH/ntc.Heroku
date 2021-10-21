@@ -148,6 +148,35 @@ app.put('/novaSenha', async (req, resp) => {
 
 
 
+  app.post('/cadastrarDenuncia', async (req,resp) => {
+    try{
+        let denuncia = req.body;
+
+        let f = await db.infoc_ntc_caracteristica_fisica.create({
+            ds_pele: denuncia.pele,
+            ds_cabelo: denuncia.cabelo,
+            ds_cor_cabelo: denuncia.corCabelo,
+            ds_complemento: denuncia.complementoFisico
+
+        })
+
+        let v = await db.infoc_ntc_vestimento.create({
+            ds_inferior:denuncia.inferior,
+            ds_superior:denuncia.superior,
+            ds_calcado:denuncia.calcado,
+            ds_complemento:denuncia.complementoVestimento
+
+        })
+
+        let r = await db.infoc_ntc_denuncia.create({
+            id_fisico: f.id_fisico,
+            id_vestimento: v.id_vestimento,
+            ds_depoimento: denuncia.descricao
+        })
+        resp.send(r);
+        }catch(e) { resp.send ({erro: 'Ocorreu um erro, a frase não foi cadastrada'})}
+
+})
 
 
 
@@ -346,14 +375,15 @@ app.post('/caracteristica', async (req,resp) => {
     try{
         let caracteristica= req.body;
 
-        let a = await db.infoc_ntc_caracteristica_fisica.findOne({where:{tp_fisido: caracteristica.descricao }})
+        let a = await db.infoc_ntc_caracteristica_fisica.findOne({where:{ds_pele: caracteristica.pele }})
         if (a != null)
            return resp.send({erro: 'A caracteristica fisica foi cadastrada ja!'})
     
         let d = await db.infoc_ntc_caracteristica_fisica.create({
-            tp_fisido: caracteristica.descricao,
-            ds_valor: caracteristica.valor,
-            ds_complemento: caracteristica.complemento
+            ds_pele: caracteristica.pele,
+            ds_cabelo: caracteristica.cabelo,
+            ds_cor_cabelo: caracteristica.corCabelo,
+            ds_complemento: caracteristica.complementoFisico
 
         })
         resp.send(d);
@@ -361,23 +391,6 @@ app.post('/caracteristica', async (req,resp) => {
    
 })
 
-app.post('/denuncia', async (req,resp) => {
-    try{
-        let denuncia = req.body;
-
-        let r = await db.infoc_ntc_caracteristica_fisica.create({
-            tp_fisico
-
-        })
-
-        let d = await db.infoc_ntc_denuncia.create({
-            ds_depoimento: denuncia.descricao,
-            bt_ativo: false
-        })
-        resp.send(d);
-        }catch(e) { resp.send ({erro: 'Ocorreu um erro, a frase não foi cadastrada'})}
-
-})
 
 
 app.post('/local', async (req,resp) => {
@@ -395,6 +408,27 @@ app.post('/local', async (req,resp) => {
         }catch(e) { resp.send ({erro: 'Ocorreu um erro, a frase não foi cadastrada'})}
 
 })
+
+
+
+app.post('/vestimento', async (req,resp) => {
+    try{
+        let vestimenta = req.body;
+
+    
+        let v = await db.infoc_ntc_vestimento.create({
+
+            ds_inferior:vestimenta.inferior,
+            ds_superior:vestimenta.superior,
+            ds_calcado:vestimenta.calcado,
+            ds_complemento:denuncia.complementoVestimento
+        })
+        resp.send(v);
+        }catch(e) { resp.send ({erro: 'Ocorreu um erro, a frase não foi cadastrada'})}
+
+})
+
+
 
 app.listen(process.env.PORT,
 r => console.log(`API subiu na porta ${process.env.PORT}`))
