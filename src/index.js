@@ -171,7 +171,8 @@ app.put('/novaSenha', async (req, resp) => {
         let r = await db.infoc_ntc_denuncia.create({
             id_fisico: f.id_fisico,
             id_vestimento: v.id_vestimento,
-            ds_depoimento: denuncia.descricao
+            ds_depoimento: denuncia.descricao,
+            bt_ativo:denuncia.ativo
         })
         resp.send(r);
         }catch(e) { resp.send ({erro: 'Ocorreu um erro, a frase não foi cadastrada'})}
@@ -359,12 +360,12 @@ app.post('/apoio', async (req,resp) => {
     try{
         let apoio = req.body;
 
-        let a = await db.infoc_ntc_apoio_frase.findOne({where:{ds_frase: apoio.descricao }})
+        let a = await db.infoc_ntc_apoio_frase.findOne({where:{ds_frase: apoio.frase }})
         if (a != null)
            return resp.send({erro: 'Frase já cadastrada'})
     
         let d = await db.infoc_ntc_apoio_frase.create({
-            ds_frase: apoio.descricao
+            ds_frase: apoio.frase
         })
         resp.send(d);
         }catch(e) { resp.send ({erro: 'Ocorreu um erro, a frase não foi cadastrada'})}
@@ -428,6 +429,176 @@ app.post('/vestimento', async (req,resp) => {
 
 })
 
+
+
+
+app.put('/administradores/:id', async (req,resp) => {
+    try {
+        let adm = req.params.id;
+         let a = req.body;
+
+
+         let d = await db.infoc_ntc_administrador.update(
+             {
+                nm_administrador: a.nome,
+                ds_senha: a.senha
+             },
+             {where: {id_administrador: adm}}
+             
+         ) 
+         resp.send(200)
+    }
+
+    catch(e) { resp.send ({erro: 'Ocorreu um erro, o administrador não foi alterado'})}
+})
+
+
+
+
+ app.put('/apoio/:id', async (req,resp) => {
+    try {
+        let apoio = req.params.id;
+         let p = req.body;
+
+
+         let d = await db.infoc_ntc_apoio_frase.update(
+             {
+                ds_frase: p.frase
+             },
+             {where: {id_frase:apoio}}
+             
+         )
+         resp.send(200)
+    }
+
+    catch(e) { resp.send ({erro: 'Ocorreu um erro, a frase não foi alterado'})}
+})
+
+
+
+app.put('/caracteristicas/:id', async (req,resp) => {
+    try {
+        let id = req.params.id;
+         let caracteristica = req.body;
+
+
+         let a = await db.infoc_ntc_caracteristica_fisica.update(
+             {
+                ds_pele: caracteristica.pele,
+                ds_cabelo: caracteristica.cabelo,
+                ds_cor_cabelo: caracteristica.corCabelo,
+                ds_complemento: caracteristica.complementoFisico
+             },
+             {where: {id_fisico:id}}
+             
+         )
+         resp.send(200)
+    }
+
+    catch(e) { resp.send ({erro: 'Ocorreu um erro, a frase não foi alterado'})}
+})
+
+
+ 
+
+app.put('/cadastrarDenuncia/:id', async (req,resp) => {
+    try {
+        let id = req.params.id;
+         let denuncia = req.body;
+
+
+         let a = await db.infoc_ntc_denuncia.update(
+             {
+                ds_depoimento: denuncia.descricao,
+                bt_ativo: denuncia.ativo
+             },
+             {where: {id_denuncia:id}}
+             
+         )
+         resp.send(200)
+    }
+
+    catch(e) { resp.send ({erro: 'Ocorreu um erro, a denuncia não foi alterada'})}
+})
+ 
+
+
+
+app.put('/local/:id', async (req,resp) => {
+    try {
+        let id = req.params.id;
+         let local = req.body;
+
+
+         let a = await db.infoc_ntc_local.update(
+             {
+                ds_latitude: local.latitude,
+                ds_longitude: local.longitude,
+                ds_bairro: local.bairro
+             },
+             {where: {id_local:id}}
+             
+         )
+         resp.send(200)
+    }
+
+    catch(e) { resp.send ({erro: 'Ocorreu um erro, o local não foi alterada'})}
+})
+
+
+
+
+
+app.put('/usuaria/:id', async (req,resp) => {
+    try {
+        let id = req.params.id;
+         let usu = req.body;
+
+
+         let a = await db.infoc_ntc_usuario.update(
+             {
+                nm_usuario: usu.usuaria,
+                ds_email: usu.email,
+                ds_senha: usu.senha,
+                ds_cpf: usu.cpf,
+                ds_telefone: usu.telefone,
+                ds_senha_rec: usu.senhaRe
+             },
+             {where: {id_usuario:id}}
+             
+         )
+         resp.send(200)
+    }
+
+    catch(e) { resp.send ({erro: 'Ocorreu um erro, o local não foi alterada'})}
+})
+ 
+
+
+
+
+app.put('/vestimenta/:id', async (req,resp) => {
+    try {
+        let id = req.params.id;
+         let v = req.body;
+
+
+         let a = await db.infoc_ntc_vestimento.update(
+             {
+                ds_inferior:v.inferior,
+                ds_superior:v.superior,
+                ds_calcado:v.calcado,
+                ds_complemento:v.complementoVestimento
+             },
+             {where: {id_vestimento:id}}
+             
+         )
+         resp.send(200)
+    }
+
+    catch(e) { resp.send ({erro: 'Ocorreu um erro, o local não foi alterada'})}
+})
+ 
 
 
 app.listen(process.env.PORT,
