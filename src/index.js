@@ -1,5 +1,5 @@
 import db from './db.js';
-import express from 'express'
+import express, { raw } from 'express'
 import cors from 'cors'
 import enviarEmail from './email.js'
 const app = express();
@@ -14,10 +14,12 @@ app.post('/cadastrar', async (req,resp) => {
     try{
         let usu = req.body;
 
+        let regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
         if(!usu.nome && usu.nome.length <= 4)
             return resp.send({erro: "O nome deve ser maior que 4 Digitos"})
 
-        if(usu.email.indexOf(".") == -1 || usu.email.indexOf("@") == -1)
+        if(regexEmail.test(usu.email) == false)
             return resp.send({erro: "O E-mail deve ser valido"})
 
         if(usu.senha.length <= 4 && !usu.senha)
@@ -29,6 +31,7 @@ app.post('/cadastrar', async (req,resp) => {
         if(usu.telefone.length <= 8 && !usu.telefone)
             return resp.send({erro: "o telefone deve ser valido"})
 
+            
         let r = await db.infoc_ntc_usuario.create({
             nm_usuario: usu.nome,
             ds_email: usu.email,
@@ -36,7 +39,6 @@ app.post('/cadastrar', async (req,resp) => {
             ds_cpf: usu.cpf, 
             ds_telefone: usu.telefone
         })
-        
         resp.send(r)
 
         } catch(e) { 
@@ -175,7 +177,9 @@ app.put('/novaSenha', async (req, resp) => {
             bt_ativo:denuncia.ativo
         })
         resp.send(r);
-        }catch(e) { resp.send ({erro: 'Ocorreu um erro, a frase não foi cadastrada'})}
+        } catch(e) { 
+            resp.send(e.toString())
+        }
 
 })
 
