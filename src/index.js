@@ -406,7 +406,7 @@ app.post('/local', async (req,resp) => {
         let d = await db.infoc_ntc_local.create({
 
             ds_latitude: local.latitude,
-            ds_logitude: local.logitude,
+            ds_longitude: local.longitude,
             ds_bairro: local.bairro
         })
         resp.send(d);
@@ -602,7 +602,123 @@ app.put('/vestimenta/:id', async (req,resp) => {
 
     catch(e) { resp.send ({erro: 'Ocorreu um erro, o local não foi alterada'})}
 })
- 
+
+
+//Functions Deletes 
+
+
+app.delete('/administradores/:id', async (req, resp) => {
+    try{
+        let id = req.params.id;
+        let verif = await db.infoc_ntc_administrador.findAll()
+        if(verif !== null){
+            let r = await db.infoc_ntc_administrador.destroy({where: {id_administrador: id}})
+            resp.sendStatus(200)
+        } else {
+            resp.send("Não foi possivel excluir o objeto")
+        }
+    } catch (e){
+        resp.send({erro: 'Ocorreu um erro'})
+    }
+})
+
+app.delete('/apoio/:id', async (req, resp) => {
+    try{
+        let id = req.params.id;
+        let verif = await db.infoc_ntc_apoio_frase.findAll()
+        if(verif !== null){
+            let r = await db.infoc_ntc_apoio_frase.destroy({where: {id_frase: id}})
+            resp.sendStatus(200)
+        } else {
+            resp.send("Não foi possivel excluir o objeto")
+        }
+    } catch (e){
+        resp.send({erro: 'Ocorreu um erro'})
+    }
+})
+
+app.delete('/caracteristicas/:id', async (req, resp) => {
+    try{
+        let id = req.params.id;
+        let verif = await db.infoc_ntc_caracteristica_fisica.findAll()
+        if(verif !== null){
+            let r = await db.infoc_ntc_caracteristica_fisica.destroy({where: {id_fisico: id}})
+            resp.sendStatus(200)
+        } else {
+            resp.send("Não foi possivel excluir o objeto")
+        }
+    } catch (e){
+        resp.send({erro: 'Ocorreu um erro'})
+    }
+})
+
+app.delete('/denuncias/:id', async (req, resp) => {
+    try{
+        let id = req.params.id;
+        let verif = await db.infoc_ntc_denuncia.findAll()
+        if(verif !== null){
+            let r = await db.infoc_ntc_denuncia.destroy({where: {id_denuncia: id}})
+            resp.sendStatus(200)
+        } else {
+            resp.send("Não foi possivel excluir o objeto")
+        }
+    } catch (e){
+        resp.send({erro: 'Ocorreu um erro'})
+    }
+})
+
+app.delete('/local/:id', async (req, resp) => {
+    try{
+        let id = req.params.id;
+        let verif = await db.infoc_ntc_local.findAll()
+        if(verif !== null){
+            let r = await db.infoc_ntc_local.destroy({where: {id_local: id}})
+            resp.sendStatus(200)
+        } else {
+            resp.send("Não foi possivel excluir o objeto")
+        }
+    } catch (e){
+        resp.send({erro: 'Ocorreu um erro'})
+    }
+})
+
+app.delete('/usuario/:id', async (req, resp) => {
+    try{
+        let id = req.params.id;
+        let verif = await db.infoc_ntc_usuario.findAll()
+        if(verif !== null){
+            let r = await db.infoc_ntc_usuario.destroy({where: {id_usuario: id}})
+            resp.sendStatus(200)
+        } else {
+            resp.send("Não foi possivel excluir o objeto")
+        }
+    } catch (e){
+        resp.send({erro: 'Ocorreu um erro'})
+    }
+})
+
+app.delete('/vestimento/:id', async (req, resp) => {
+    try{
+        let id = req.params.id;
+        let verif = await db.infoc_ntc_vestimento.findAll()
+        if(verif !== null){
+            let r = await db.infoc_ntc_vestimento.destroy({where: {id_vestimento: id}})
+            resp.sendStatus(200)
+        } else {
+            resp.send("Não foi possivel excluir o objeto")
+        }
+    } catch (e){
+        resp.send({erro: 'Ocorreu um erro'})
+    }
+})
+
+
+
+
+
+
+
+
 
 
 app.listen(process.env.PORT,
