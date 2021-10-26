@@ -200,10 +200,16 @@ app.post("/cadastrarDenuncia", async (req, resp) => {
   }
 });
 
-
-
-
-
+app.get("/denuncias", async (req, resp) => {
+  try {
+    let denu = await db.infoc_ntc_denuncia.findAll({
+      order: [["id_denuncia", "desc"]],
+    });
+    resp.send(denu);
+  } catch (e) {
+    resp.send({ erro: "Ocorreu um erro" });
+  }
+});
 
 
 
@@ -272,15 +278,35 @@ app.delete("/apoio/:id", async (req, resp) => {
 });
 
 
+app.get("/BuscarUsu/:id", async(req, resp) =>{
+  try{
+    let r = await db.infoc_ntc_usuario.findOne({
+      where: {id_usuario: req.params.id}
+    })
+    resp.send(r)
+  } catch(e){
+    resp.send(e.toString())
+  }
+})
 
 
 
 
 
+app.get("/local", async (req,resp) => {
 
-
-
-
+  try { const data = await db.infoc_ntc_local.findAll({
+       group: [ col('infoc_ntc_local.ds_bairro')],
+       attributes: [ "ds_bairro",
+       [fn('count', "ds_bairro" ), 'qtd']
+   ]
+   });
+   resp.send(data);
+   } catch(e){
+     resp.send(e.toString())
+   }
+})
+ 
 
 
 
@@ -456,16 +482,7 @@ app.get("/caracteristicas", async (req, resp) => {
   }
 });
 
-app.get("/denuncias", async (req, resp) => {
-  try {
-    let denu = await db.infoc_ntc_denuncia.findAll({
-      order: [["id_denuncia", "desc"]],
-    });
-    resp.send(denu);
-  } catch (e) {
-    resp.send({ erro: "Ocorreu um erro" });
-  }
-});
+
 
 app.get("/local", async (req, resp) => {
   try {
