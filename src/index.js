@@ -3,6 +3,8 @@ import express, { raw } from "express";
 import cors from "cors";
 import enviarEmail from "./email.js";
 const app = express();
+import Sequelize from 'sequelize';
+const { Op, col, fn } = Sequelize;
 app.use(cors());
 app.use(express.json());
 
@@ -152,6 +154,22 @@ app.put("/novaSenha", async (req, resp) => {
   resp.send("Senha alterada com sucesso.");
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.post("/cadastrarDenuncia", async (req, resp) => {
   try {
     let denuncia = req.body;
@@ -181,6 +199,16 @@ app.post("/cadastrarDenuncia", async (req, resp) => {
     resp.send(e.toString());
   }
 });
+
+
+
+
+
+
+
+
+
+
 
 app.get("/apoio", async (req, resp) => {
   try {
@@ -242,6 +270,26 @@ app.delete("/apoio/:id", async (req, resp) => {
     resp.send({ erro: "Ocorreu um erro" });
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.get("/administrador", async (req, resp) => {
   try {
@@ -325,10 +373,54 @@ app.delete("/administrador/:id", async (req, resp) => {
 
 
 
+app.get("/usuario", async (req, resp) => {
+  try {
+    let usuario = await db.infoc_ntc_usuario.findAll({
+      order: [["id_usuario", "desc"]],
+      raw: true
+    });
+    delete usuario.ds_senha;
+    resp.send(usuario);
+  } catch (e) {
+    resp.send({ erro: "Ocorreu um erro" });
+  }
+});
 
+app.delete("/usuario/:id", async (req, resp) => {
+  try {
+    let id = req.params.id;
+    let verif = await db.infoc_ntc_usuario.findAll();
+    if (verif !== null) {
+      let r = await db.infoc_ntc_usuario.destroy({ where: { id_usuario: id } });
+      resp.sendStatus(200);
+    } else {
+      resp.send("Não foi possivel excluir este Usuario");
+    }
+  } catch (e) {
+    resp.send({ erro: "Ocorreu um erro" });
+  }
+});
 
-
-
+app.post('/buscarUsuario', async(req, resp) =>{
+    try {
+      let usuario = await db.infoc_ntc_usuario.findAll({
+        where: {
+          [Op.or]: [
+            { 'nm_usuario': { [Op.like]:`%${req.body.busca}%` } },
+            { 'ds_email': { [Op.like]:`%${req.body.busca}%` } },
+            { 'ds_cpf': { [Op.like]:`%${req.body.busca}%` } },
+            { 'ds_Telefone': { [Op.like]:`%${req.body.busca}%` } },
+          ]
+        }
+      })
+      if(usuario === []){
+        return resp.send({erro: 'Não encontrado'})
+      }
+      resp.send(usuario)
+    } catch (e) {
+        resp.send(e.toString())
+    }
+})
 
 
 
@@ -381,17 +473,6 @@ app.get("/local", async (req, resp) => {
       order: [["id_local", "desc"]],
     });
     resp.send(local);
-  } catch (e) {
-    resp.send({ erro: "Ocorreu um erro" });
-  }
-});
-
-app.get("/usuario", async (req, resp) => {
-  try {
-    let usuario = await db.infoc_ntc_usuario.findAll({
-      order: [["id_usuario", "desc"]],
-    });
-    resp.send(usuario);
   } catch (e) {
     resp.send({ erro: "Ocorreu um erro" });
   }
@@ -601,20 +682,6 @@ app.delete("/local/:id", async (req, resp) => {
   }
 });
 
-app.delete("/usuario/:id", async (req, resp) => {
-  try {
-    let id = req.params.id;
-    let verif = await db.infoc_ntc_usuario.findAll();
-    if (verif !== null) {
-      let r = await db.infoc_ntc_usuario.destroy({ where: { id_usuario: id } });
-      resp.sendStatus(200);
-    } else {
-      resp.send("Não foi possivel excluir o objeto");
-    }
-  } catch (e) {
-    resp.send({ erro: "Ocorreu um erro" });
-  }
-});
 
 app.delete("/vestimento/:id", async (req, resp) => {
   try {
