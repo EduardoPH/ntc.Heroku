@@ -443,6 +443,26 @@ app.get("/localBairro", async (req,resp) => {
 
 
 
+  app.get("/qtdMes", async (req,resp) => {
+
+    try{
+        const data = await db.infoc_ntc_denuncia.findAll({
+            group: [ col('infoc_ntc_denuncia.dt_depoimento')],
+            attributes: [ "dt_depoimento",
+            [(data.getMonth("dt_depoimento"))]
+            [fn('count', Month, "dt_depoimento" ), 'qtd']
+        ]
+        })
+
+        resp.send(data);
+    } catch(e){
+      resp.send(e.toString())
+    }
+  })
+
+
+
+
    
 
 
