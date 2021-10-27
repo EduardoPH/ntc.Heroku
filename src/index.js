@@ -293,12 +293,22 @@ app.get("/BuscarUsu/:id", async(req, resp) =>{
 
 
 
-app.get("/local", async (req,resp) => {
 
-  try { const data = await db.infoc_ntc_local.findAll({
-       group: [ col('infoc_ntc_local.ds_bairro')],
-       attributes: [ "ds_bairro",
-       [fn('count', "ds_bairro" ), 'qtd']
+
+
+
+
+
+
+
+
+app.get("/localCidade", async (req,resp) => {
+
+  try { 
+        const data = await db.infoc_ntc_local.findAll({
+       group: [ col('infoc_ntc_local.ds_cidade')],
+       attributes: [ "ds_cidade",
+       [fn('count', "ds_cidade" ), 'qtd']
    ]
    });
    resp.send(data);
@@ -308,6 +318,27 @@ app.get("/local", async (req,resp) => {
 })
  
 
+
+
+app.get("/localBairro", async (req,resp) => {
+
+    try{
+          const data = await db.infoc_ntc_local.findAll({
+         group: [ col('infoc_ntc_local.ds_bairro')],
+         attributes: [ "ds_bairro",
+         [fn('count', "ds_bairro" ), 'qtd']
+     ]
+     });
+     resp.send(data);
+     } catch(e){
+       resp.send(e.toString())
+     }
+  })
+
+
+
+
+   
 
 
 
