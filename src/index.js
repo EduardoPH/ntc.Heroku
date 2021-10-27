@@ -279,6 +279,46 @@ app.post('/Buscardenuncia', async(req, resp) =>{
 
 
 
+app.get('/validarDenuncia', async(req, resp) =>{
+  try {
+    let denu = await db.infoc_ntc_denuncia.findAll({
+      order: [["id_denuncia", "desc"]],
+      include:[
+        {
+          model: db.infoc_ntc_usuario,
+          as: 'id_usuario_infoc_ntc_usuario',
+          attributes:['nm_usuario', 'ds_email', 'ds_telefone', 'ds_cpf'],
+          required: true
+        },
+        {
+          model: db.infoc_ntc_vestimento,
+          as:"id_vestimento_infoc_ntc_vestimento",
+          required: true
+        },
+        {
+          model: db.infoc_ntc_caracteristica_fisica,
+          as:"id_fisico_infoc_ntc_caracteristica_fisica",
+          required: true
+        },
+        {
+          model: db.infoc_ntc_local,
+          as: 'id_local_infoc_ntc_local',
+          required: true
+        }
+      ],
+      limit:1
+    });
+
+    resp.send(denu);
+  } catch (error) {
+    resp.send({erro: 'Houve um erro durante a busca'})
+  }
+
+})
+
+
+
+
 
 
 app.get("/apoio", async (req, resp) => {
@@ -525,20 +565,49 @@ app.delete("/usuario/:id", async (req, resp) => {
 
 app.post('/buscarUsuario', async(req, resp) =>{
     try {
-      let usuario = await db.infoc_ntc_usuario.findAll({
+      let usu = db.infoc_ntc_usuario.findAll({
         where: {
           [Op.or]: [
-            { 'nm_usuario': { [Op.like]:`%${req.body.busca}%` } },
-            { 'ds_email': { [Op.like]:`%${req.body.busca}%` } },
-            { 'ds_cpf': { [Op.like]:`%${req.body.busca}%` } },
-            { 'ds_Telefone': { [Op.like]:`%${req.body.busca}%` } },
+            { 'id_usuario_infoc_ntc_usuario.nm_usuario': { [Op.like]:`%${req.body.busca}%` } },
+            { 'id_usuario_infoc_ntc_usuario.ds_email': { [Op.like]:`%${req.body.busca}%` } },
+            { 'id_usuario_infoc_ntc_usuario.ds_cpf': { [Op.like]:`%${req.body.busca}%` } },
+            { 'id_usuario_infoc_ntc_usuario.ds_Telefone': { [Op.like]:`%${req.body.busca}%` } },
           ]
         }
       })
-      if(usuario === []){
+      if(usu === []){
         return resp.send({erro: 'Não encontrado'})
       }
-      resp.send(usuario)
+      let r = await db.infoc_ntc_denuncia.findAll({
+        where: {
+            id_usuario: usu.id_usuario
+        },
+        include:[
+          {
+            model: db.infoc_ntc_usuario,
+            as: 'id_usuario_infoc_ntc_usuario',
+            attributes:['nm_usuario', 'ds_email', 'ds_telefone', 'ds_cpf'],
+            required: true
+          },
+          {
+            model: db.infoc_ntc_vestimento,
+            as:"id_vestimento_infoc_ntc_vestimento",
+            required: true
+          },
+          {
+            model: db.infoc_ntc_caracteristica_fisica,
+            as:"id_fisico_infoc_ntc_caracteristica_fisica",
+            required: true
+          },
+          {
+            model: db.infoc_ntc_local,
+            as: 'id_local_infoc_ntc_local',
+            required: true
+          }
+        ],
+      })
+      
+      resp.send(r)
     } catch (e) {
         resp.send(e.toString())
     }
