@@ -345,6 +345,41 @@ app.get('/validarDenuncia', async(req, resp) =>{
 })
 
 
+app.delete("/denuncia/:id", async (req, resp) => {
+  try {
+    let verif = await db.infoc_ntc_denuncia.findOne({where: {id_usuario: req.params.id}});
+
+    
+    if (verif !== null) {
+      let r = await db.infoc_ntc_denuncia.destroy({
+        where: { id_denuncia: id },
+      });
+      resp.sendStatus(200);
+    } else {
+      resp.send("Não foi possivel excluir a denuncia");
+    }
+  } catch (e) {
+    resp.send({ erro: "Ocorreu um erro" });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -875,27 +910,9 @@ app.put("/vestimenta/:id", async (req, resp) => {
   }
 });
 
-//Functions Deletes
 
 
 
-
-app.delete("/denuncias/:id", async (req, resp) => {
-  try {
-    let id = req.params.id;
-    let verif = await db.infoc_ntc_denuncia.findAll();
-    if (verif !== null) {
-      let r = await db.infoc_ntc_denuncia.destroy({
-        where: { id_denuncia: id },
-      });
-      resp.sendStatus(200);
-    } else {
-      resp.send("Não foi possivel excluir o objeto");
-    }
-  } catch (e) {
-    resp.send({ erro: "Ocorreu um erro" });
-  }
-});
 
 app.delete("/local/:id", async (req, resp) => {
   try {
