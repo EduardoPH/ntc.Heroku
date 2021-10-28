@@ -16,7 +16,6 @@ export default function initModels(sequelize) {
   var infoc_ntc_local = _infoc_ntc_local.init(sequelize, DataTypes);
   var infoc_ntc_usuario = _infoc_ntc_usuario.init(sequelize, DataTypes);
   var infoc_ntc_vestimento = _infoc_ntc_vestimento.init(sequelize, DataTypes);
-  
   infoc_ntc_denuncia.belongsTo(infoc_ntc_caracteristica_fisica, { as: "id_fisico_infoc_ntc_caracteristica_fisica", foreignKey: "id_fisico"});
   infoc_ntc_caracteristica_fisica.hasMany(infoc_ntc_denuncia, { as: "infoc_ntc_denuncia", foreignKey: "id_fisico"});
   infoc_ntc_denuncia.belongsTo(infoc_ntc_local, { as: "id_local_infoc_ntc_local", foreignKey: "id_local"});
@@ -25,7 +24,6 @@ export default function initModels(sequelize) {
   infoc_ntc_usuario.hasMany(infoc_ntc_denuncia, { as: "infoc_ntc_denuncia", foreignKey: "id_usuario"});
   infoc_ntc_denuncia.belongsTo(infoc_ntc_vestimento, { as: "id_vestimento_infoc_ntc_vestimento", foreignKey: "id_vestimento"});
   infoc_ntc_vestimento.hasMany(infoc_ntc_denuncia, { as: "infoc_ntc_denuncia", foreignKey: "id_vestimento"});
-  
   return {
     infoc_ntc_administrador,
     infoc_ntc_apoio_frase,
@@ -34,6 +32,5 @@ export default function initModels(sequelize) {
     infoc_ntc_local,
     infoc_ntc_usuario,
     infoc_ntc_vestimento,
-    
   };
 }

@@ -52,24 +52,12 @@ app.post("/login", async (req, resp) => {
     let { email, senha } = req.body;
 
     let valido = await db.infoc_ntc_usuario.findOne({
-      where: { ds_email: email, ds_senha: senha },
-      raw: true,
+      where: { ds_email: email, ds_senha: senha }
     });
 
     if (!valido) return resp.send({ erro: "Credenciais Inválidas" });
 
-    let denuncia = await db.infoc_ntc_denuncia.findAll({
-      where: { id_usuario: valido.id_usuario },
-      raw: true,
-    });
-
-    delete denuncia.bt_ativo;
-
-    delete valido.ds_senha;
-
-    let r = { ...valido, denuncia: denuncia };
-
-    return resp.send(r);
+     resp.send(valido);
   } catch (e) {
     resp.send(e.toString());
   }
@@ -276,6 +264,46 @@ app.post('/Buscardenuncia', async(req, resp) =>{
 
 })
 
+
+app.get('/Buscarden/:id', async(req, resp) =>{
+  try {
+    let denu = await db.infoc_ntc_denuncia.findAll({
+      where: { 
+        id_usuario: req.params.id 
+      },
+      order: [["id_denuncia", "desc"]],
+      include:[
+        {
+          model: db.infoc_ntc_usuario,
+          as: 'id_usuario_infoc_ntc_usuario',
+          attributes:['nm_usuario', 'ds_email', 'ds_telefone', 'ds_cpf'],
+          required: true
+        },
+        {
+          model: db.infoc_ntc_vestimento,
+          as:"id_vestimento_infoc_ntc_vestimento",
+          required: true
+        },
+        {
+          model: db.infoc_ntc_caracteristica_fisica,
+          as:"id_fisico_infoc_ntc_caracteristica_fisica",
+          required: true
+        },
+        {
+          model: db.infoc_ntc_local,
+          as: 'id_local_infoc_ntc_local',
+          required: true
+        }
+  
+    ]
+    });
+
+    resp.send(denu);
+  } catch (error) {
+    resp.send({erro: 'Houve um erro durante a busca'})
+  }
+
+})
 
 
 
