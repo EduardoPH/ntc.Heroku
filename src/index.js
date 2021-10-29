@@ -714,6 +714,7 @@ app.post('/buscarUsuario', async(req, resp) =>{
       if(usu === []){
         return resp.send({erro: 'Não encontrado'})
       }
+    
       let r = await db.infoc_ntc_denuncia.findAll({
         where: {
             id_usuario: usu.id_usuario
