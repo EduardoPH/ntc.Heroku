@@ -16,23 +16,23 @@ app.post("/cadastrar", async (req, resp) => {
   try {
     let usu = req.body;
 
+    if (usu.nome === '' || usu.nome.length >= 4 === false)
+      return resp.send({ erro: "O nome deve ser maior que 4 Digitos" });
+
+    if (usu.telefone.length >= 11 === false || usu.telefone === '' || isNumber(usu.telefone) === false)
+      return resp.send({ erro: "o telefone deve ser valido" });
+
     let regexEmail =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    if (!usu.nome && usu.nome.length <= 4)
-      return resp.send({ erro: "O nome deve ser maior que 4 Digitos" });
-
-    if (regexEmail.test(usu.email) == false)
+    if (regexEmail.test(usu.email) === false)
       return resp.send({ erro: "O E-mail deve ser valido" });
 
-    if (usu.senha.length <= 4 && !usu.senha)
+    if (usu.senha.length >= 4 === false && !usu.senha)
       return resp.send({ erro: "A senha deve Maior que 4 digitos" });
 
-    if (usu.cpf.length <= 9 && !usu.cpf)
+    if (usu.cpf.length >= 9 === false && !usu.cpf)
       return resp.send({ erro: "o CPF deve ser valido" });
-
-    if (usu.telefone.length <= 8 && !usu.telefone)
-      return resp.send({ erro: "o telefone deve ser valido" });
 
     let r = await db.infoc_ntc_usuario.create({
       nm_usuario: usu.nome,
@@ -344,27 +344,78 @@ app.get('/validarDenuncia', async(req, resp) =>{
 
 })
 
+app.get('/validarDenunciaFalse', async(req, resp) =>{
+  try {
+    let denu = await db.infoc_ntc_denuncia.findAll({
+      where:{bt_ativo: false},
+      order: [["id_denuncia"]],
+      include:[
+        {
+          model: db.infoc_ntc_usuario,
+          as: 'id_usuario_infoc_ntc_usuario',
+          attributes:['nm_usuario', 'ds_email', 'ds_telefone', 'ds_cpf'],
+          required: true
+        },
+        {
+          model: db.infoc_ntc_vestimento,
+          as:"id_vestimento_infoc_ntc_vestimento",
+          required: true
+        },
+        {
+          model: db.infoc_ntc_caracteristica_fisica,
+          as:"id_fisico_infoc_ntc_caracteristica_fisica",
+          required: true
+        },
+        {
+          model: db.infoc_ntc_local,
+          as: 'id_local_infoc_ntc_local',
+          required: true
+        }
+      ],
+      limit:1
+    });
+
+    resp.send(denu);
+  } catch (error) {
+    resp.send({erro: 'Houve um erro durante a busca'})
+  }
+
+})
 
 app.delete("/denuncia/:id", async (req, resp) => {
   try {
-    let verif = await db.infoc_ntc_denuncia.findOne({where: {id_usuario: req.params.id}});
-
     
-    if (verif !== null) {
       let r = await db.infoc_ntc_denuncia.destroy({
-        where: { id_denuncia: id },
+        where: { id_denuncia: req.params.id },
       });
-      resp.sendStatus(200);
-    } else {
-      resp.send("Não foi possivel excluir a denuncia");
-    }
+      
+      if(!r)
+        resp.send("Não foi possivel excluir a denuncia");
+      
+      return resp.sendStatus(200);
   } catch (e) {
-    resp.send({ erro: "Ocorreu um erro" });
+    resp.send(e.toString());
   }
 });
 
 
+app.put("/cadastrarDenuncia/:id", async (req, resp) => {
+  try {
+    let id = req.params.id;
+    let denuncia = req.body;
 
+    let a = await db.infoc_ntc_denuncia.update(
+      {
+        ds_depoimento: denuncia.ds_depoimento,
+        bt_ativo: true
+      },
+      { where: { id_denuncia: id } }
+    );
+    resp.send(200);
+  } catch (e) {
+    resp.send({ erro: "Ocorreu um erro, a denuncia não foi alterada" });
+  }
+});
 
 
 
@@ -830,24 +881,6 @@ app.put("/caracteristicas/:id", async (req, resp) => {
     resp.send(200);
   } catch (e) {
     resp.send({ erro: "Ocorreu um erro, a frase não foi alterado" });
-  }
-});
-
-app.put("/cadastrarDenuncia/:id", async (req, resp) => {
-  try {
-    let id = req.params.id;
-    let denuncia = req.body;
-
-    let a = await db.infoc_ntc_denuncia.update(
-      {
-        ds_depoimento: denuncia.descricao,
-        bt_ativo: denuncia.ativo,
-      },
-      { where: { id_denuncia: id } }
-    );
-    resp.send(200);
-  } catch (e) {
-    resp.send({ erro: "Ocorreu um erro, a denuncia não foi alterada" });
   }
 });
 
