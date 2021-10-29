@@ -384,7 +384,7 @@ app.get('/validarDenunciaFalse', async(req, resp) =>{
 
 app.delete("/denuncia/:id", async (req, resp) => {
   try {
-    
+      console.log(req.params.id)
       let r = await db.infoc_ntc_denuncia.destroy({
         where: { id_denuncia: req.params.id },
       });
