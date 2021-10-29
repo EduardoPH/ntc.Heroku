@@ -2,7 +2,9 @@
 import express from 'express';
 import cors from 'cors';
 
-import Denuncia from './Controller/admController.js' 
+import Administrador from './Controller/admController.js' 
+import UsuarioController from "./Controller/usuarioController.js"
+import DenunciaController from "./Controller/denunciaController"
 
 const server = express();
 server.use(cors());
@@ -13,7 +15,8 @@ server.use(express.json());
 //server.use('/ROTA', COMPONENTE_IMPORTADO );
 
 
-server.use('/Administrador', Denuncia)
+server.use('/Administrador', Administrador)
+server.use('/usuario', UsuarioController)
 
 
 server.listen(process.env.PORT, (r) =>
