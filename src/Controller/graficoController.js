@@ -4,7 +4,29 @@ const app = Router();
 
 
 
+  
 app.get("/", async (req,resp) => {
+  
+    try{
+          const data = await db.infoc_ntc_local.findAll({
+         group: [ col('infoc_ntc_local.ds_bairro')],
+         attributes: [ "ds_bairro",
+         [fn('count', "ds_bairro" ), 'qtd']
+     ]
+     });
+     resp.send(data);
+     } catch(e){
+       resp.send(e.toString())
+     }
+  })
+
+
+
+
+
+
+
+app.get("/Cidades", async (req,resp) => {
 
     try { 
      const data = await db.infoc_ntc_local.findAll({
@@ -18,33 +40,14 @@ app.get("/", async (req,resp) => {
        resp.send(e.toString())
      }
   })
-   
-  
-  
-  
-  app.get("/", async (req,resp) => {
-  
-      try{
-            const data = await db.infoc_ntc_local.findAll({
-           group: [ col('infoc_ntc_local.ds_bairro')],
-           attributes: [ "ds_bairro",
-           [fn('count', "ds_bairro" ), 'qtd']
-       ]
-       });
-       resp.send(data);
-       } catch(e){
-         resp.send(e.toString())
-       }
-    })
 
 
-
-    export default app;
+ 
   
   
   
   
-    app.get("/", async (req,resp) => {
+    app.get("/qtdMes", async (req,resp) => {
   
       try{
           const data = await db.infoc_ntc_denuncia.findAll({
@@ -64,3 +67,6 @@ app.get("/", async (req,resp) => {
     })
   
   
+
+
+    export default app;
