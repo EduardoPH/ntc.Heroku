@@ -71,7 +71,7 @@ app.get('/denuncia', async(req, resp) =>{
             ],
             limit:1
         })
-        resp.send(denuncias)
+        resp.send(denuncias[0])
     } catch(e){
         resp.send({erro: 'Não foi possível listar as Denuncias'})
     }
