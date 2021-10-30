@@ -62,8 +62,78 @@ app.get("/Cidades", async (req,resp) => {
                 [fn('count', 'dt_cadastro'), 'qtd']
               ]
           })
+          
+          
+          
+          
+           
+          function NomeMes(mes){
+           let r = ''
+            switch(mes){
+                case '01':
+                   r =  'JAN'
+                break;
+    
+                case '02':
+                  r =  'FEV'
+                break;
+    
+                case '03':
+                   r =  'MAR'
+                break;
+    
+                case '04':
+                  r =  'ABR'
+                break;
+    
+                case '05':
+                  r =  'MAI'
+                break;
+    
+                case '06':
+                  r =  'JUN'
+                break;
+    
+                case '07':
+                   r = 'JUL'
+                break;
+    
+                case '08':
+                 r =  'AGO'
+                break;
+    
+                case '09':
+                  r = 'SET'
+                break;
+    
+                case '10':
+                   r =  'OUT'
+                break;
+    
+                case '11':
+                  r =  'NOV'
+                break;
+    
+                case '12':
+                  r = 'DEZ'
+                break;
+            
+            }
+           return r
+        }
+      
+       console.log(data)
+        let mes = [
+            data.map(i => 
+                ({ 
+                  mes: NomeMes(i.dataValues.mes),
+                  qtd: i.dataValues.qtd
+                })
+            )
+           
+        ] 
   
-          resp.send(data);
+          resp.send(mes);
       } catch(e){
         resp.send(e.toString())
       }
