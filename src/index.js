@@ -2,7 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 
-import Administrador from './Controller/admController.js' 
+import AdministradorController from './Controller/admController.js'
 import UsuarioController from "./Controller/usuarioController.js"
 import DenunciaController from "./Controller/denunciaController.js"
 import GraficoController from "./Controller/graficoController.js"
@@ -15,7 +15,7 @@ server.use(express.json());
 //server.use('/ROTA', COMPONENTE_IMPORTADO );
 
 
-server.use('/Administrador', Administrador)
+server.use('/Administrador', AdministradorController)
 server.use('/Denuncia', DenunciaController)
 server.use('/Grafico', GraficoController)
 server.use('/usuario', UsuarioController)
