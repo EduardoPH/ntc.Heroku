@@ -1,4 +1,7 @@
+import db from '../db.js'
 import {Router} from 'express'
+import Sequelize from 'sequelize';
+const { Op, col, fn } = Sequelize;
 
 const app = Router();
 
@@ -8,7 +11,7 @@ const app = Router();
 app.get("/", async (req,resp) => {
   
     try{
-          const data = await db.infoc_ntc_local.findAll({
+        const data = await db.infoc_ntc_local.findAll({
          group: [ col('infoc_ntc_local.ds_bairro')],
          attributes: [ "ds_bairro",
          [fn('count', "ds_bairro" ), 'qtd']
@@ -45,7 +48,7 @@ app.get("/Cidades", async (req,resp) => {
  
   
   
-  
+   
   
     app.get("/qtdMes", async (req,resp) => {
   
@@ -65,8 +68,7 @@ app.get("/Cidades", async (req,resp) => {
         resp.send(e.toString())
       }
     })
-  
-  
+   
 
 
     export default app;
