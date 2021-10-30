@@ -292,6 +292,29 @@ app.delete("/cargos/:id", async (req, resp) => {
     });
     }
 });
+// LOGIN DO ADM
+app.post("/login", async(req, resp) =>{
+
+  try {
+    let {nome, senha} = req.body
+
+    let r = await db.infoc_ntc_administrador.findOne({
+      where: {
+        'nm_administrador': nome,
+        'ds_senha': senha
+      }
+    }) 
+    
+    if(!r)
+      return resp.send({erro: 'Credenciais inválidas'})
+
+    resp.send(r)
+
+  } catch (e) {
+    resp.send(e.toString())
+  }
+  
+})
   
 
 

@@ -435,16 +435,7 @@ app.put("/cadastrarDenuncia/:id", async (req, resp) => {
 
 
 
-app.get("/apoio", async (req, resp) => {
-  try {
-    let apoio = await db.infoc_ntc_apoio_frase.findAll({
-      order: [["id_frase", "desc"]],
-    });
-    resp.send(apoio);
-  } catch (e) {
-    resp.send({ erro: "Ocorreu um erro" });
-  }
-});
+c
 
 app.post("/apoio", async (req, resp) => {
   try {

@@ -122,7 +122,6 @@ app.get("/Cidades", async (req,resp) => {
            return r
         }
       
-       console.log(data)
         let mes = [
             data.map(i => 
                 ({ 
