@@ -17,7 +17,7 @@ server.use(express.json());
 
 server.use('/Administrador', AdministradorController)
 server.use('/Denuncia', DenunciaController)
-server.use('/Grafico', GraficoController)
+server.use('/estatisticas', GraficoController)
 server.use('/usuario', UsuarioController)
 
 
