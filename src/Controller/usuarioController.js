@@ -40,35 +40,31 @@ app.post("/cadastrar", async (req, resp) => {
     } catch (e) {
       resp.send(e.toString());
     }
-  });
+});
 
 
-  app.post("/login", async (req, resp) => {
-    try {
-      let { email, senha } = req.body;
-  
-      let valido = await db.infoc_ntc_usuario.findOne({
-        where: { ds_email: email, ds_senha: senha }
-      });
-
-      if (!valido)
-      return resp.send({erro: "Credenciais invalidas"})
-      
-
-      let regexEmail =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+app.post("/login", async (req, resp) => {
+  try {
+    let { email, senha } = req.body;
+    
+    let regexEmail =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (regexEmail.test(email) === false)
-      return resp.send({ erro: "O E-mail deve ser valido" });
-  
- 
-      
-  
-       resp.send(valido);
-    } catch (e) {
-      resp.send(e.toString());
-    }
-  })
+        return resp.send({ erro: "O E-mail deve ser valido" });
+
+    let valido = await db.infoc_ntc_usuario.findOne({
+      where: { ds_email: email, ds_senha: senha }
+    });
+
+    if (!valido)
+      return resp.send({erro: "Credenciais invalidas"})
+    
+    resp.send(valido);
+  } catch (e) {
+    resp.send(e.toString());
+  }
+})
 
   export default app
 
