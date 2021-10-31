@@ -101,10 +101,60 @@ app.post("/recuperacao", async (req, resp) => {
       usuaria.ds_email,
       "Recuperação de Senha",
       `
-        <h3> Recuperação de Senha </h3>
-        <p> Você solicitou a recuperação de senha da sua conta. </p>
-        <p> Entre com o código <b>${numero}</b> para prosseguir com a recuperação.
-        `
+      <style type="text/css">
+      body,
+      html, 
+      .body {
+        background: #f3f3f3 !important;
+      }
+    
+      .header {
+        background: #f3f3f3;
+      }
+    </style>
+    <!-- move the above styles into your custom stylesheet -->
+    
+    <spacer size="16"></spacer>
+    
+    <container>
+    
+      <row class="header">
+        <columns>
+    
+          <spacer size="16"></spacer>
+          
+          <h2 class="Recuperação de Senha</h2>
+        </columns>
+      </row>
+      <row>
+        <columns>
+    
+          <spacer size="32"></spacer>
+    
+          <center>
+            <img src="https://drive.google.com/file/d/1hy5vv4ksrW_oPiQQThCgZkCsErex3CE8/view">
+          </center>
+    
+          <spacer size="16"></spacer>
+    
+          <h1 class="text-center">Recuperação de Senha</h1>
+          
+          <spacer size="16"></spacer>
+    
+          <p class="text-center">It happens. Click the link below to reset your password.</p>
+          <button class="large expand" href="#">${numeros}</button>
+    
+          <hr/>
+    
+          <p><small>  Esse email é automatico, nao responda!!! </small></p>
+        </columns>
+      </row>
+    
+      <spacer size="16"></spacer>
+    </container>
+      
+      
+      `
     );
 
     resp.sendStatus(200);
