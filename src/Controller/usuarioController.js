@@ -15,7 +15,7 @@ app.post("/cadastrar", async (req, resp) => {
       if (nome.replace(/( )+/g, '') == "" || nome.length < 4)
         return resp.send({ erro: "O nome deve ser maior que 4 Digitos" });
   
-      if (telefone.length === 11  || telefone.replace(/( )+/g, '') == "" || isNaN(telefone))
+      if (telefone.replace(/( )+/g, '') == "" || isNaN(telefone))
         return resp.send({ erro: "o telefone deve ser valido" });
   
       let regexEmail =
@@ -114,39 +114,42 @@ app.post("/recuperacao", async (req, resp) => {
 });
 
 app.post("/validarCodigo", async (req, resp) => {
-  const usuaria = await db.infoc_ntc_usuario.findOne({
-    where: {
-      ds_email: req.body.email,
-    },
-  });
-
-  if (!usuaria) {
-    resp.send({ status: "erro", mensagem: "E-mail inválido." });
+  try {
+    let { email, codigo } = req.body
+    const usuaria = await db.infoc_ntc_usuario.findOne({
+      where: {
+        ds_email: email,
+      },
+    });
+    
+    if (usuaria.dataValues.ds_senha_rec !== codigo) {
+       return resp.send( {erro: "Código inválido." });
+    }
+    resp.sendStatus(200);
+  } catch (e) {
+      resp.send(e.toString())
   }
-
-  if (usuaria.ds_senha_rec !== req.body.codigo) {
-    resp.send({ status: "erro", mensagem: "Código inválido." });
-  }
-
-  resp.send({ status: "ok", mensagem: "Código validado." });
 });
 
 app.put("/novaSenha", async (req, resp) => {
+
+  let { email, senha, codigo } = req.body
+
   const usuaria = await db.infoc_ntc_usuario.findOne({
-    where: { ds_email: req.body.email },
+    where: { ds_email: email },
   });
 
   if (!usuaria) {
-    resp.send({ erro: "E-mail inválido." });
+    return resp.send({ erro: "E-mail inválido." });
   }
 
-  if (usuaria.ds_senha_rec !== req.body.codigo || usuaria.ds_senha_rec === "") {
-    resp.send({ erro: "Código inválido." });
+  if (usuaria.ds_senha_rec !== codigo || usuaria.ds_senha_rec === "") {
+    return resp.send({ erro: "Código inválido." });
   }
 
   await db.infoc_ntc_usuario.update(
     {
-      ds_senha: req.body.novaSenha,
+      ds_senha: senha,
       ds_senha_rec: "",
     },
     {
