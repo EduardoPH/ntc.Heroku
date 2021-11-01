@@ -1,7 +1,7 @@
 
 
 import db from '../db.js';
-import { Router} from 'express'
+import Router from 'express'
 import enviarEmail from '../email.js'
 
 const app = Router();

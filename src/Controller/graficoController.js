@@ -1,5 +1,5 @@
 import db from '../db.js'
-import {Router} from 'express'
+import Router from 'express'
 import Sequelize from 'sequelize';
 const { Op, col, fn } = Sequelize;
 
