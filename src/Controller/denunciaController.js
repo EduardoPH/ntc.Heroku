@@ -1,6 +1,6 @@
 import db from '../db.js'
 
-import  Router  from 'express'
+import {Router}  from 'express'
 const app = Router();
 
 function DenunFilter() {
@@ -14,7 +14,7 @@ function DenunFilter() {
     },
     {
       model: db.infoc_ntc_vestimento,
-      as: "id_vestimento_infoc_ntc_vestimento",
+      as: "vestimento",
       attributes: [
         ["ds_inferior", "partInferior"],
         ["ds_superior", "partSuperior"],
@@ -50,8 +50,7 @@ app.get('/', async (req, resp) => {
     let value = await db.infoc_ntc_denuncia.findAll({
       include: DenunFilter(),
       attributes: [
-        ['ds_depoimento', 'msg'],
-        ['dt_cadastro', 'data']
+        ['ds_depoimento', 'msg']
       ]
     })
     resp.send(value)
