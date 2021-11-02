@@ -1,5 +1,5 @@
 import db from "../db.js";
-import { raw, Router } from "express";
+import  Router  from "express";
 
 const app = Router();
 
@@ -27,7 +27,7 @@ function fkDenuncia() {
     },
     {
       model: db.infoc_ntc_vestimento,
-      as: "id_vestimento_infoc_ntc_vestimento",
+      as: "vestimento", 
       attributes: [
         ["ds_inferior", "partInferior"],
         ["ds_superior", "partSuperior"],
