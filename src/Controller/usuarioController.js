@@ -1,4 +1,4 @@
-
+import crypto from 'crypto-js'
 
 import db from '../db.js';
 import Router from 'express'
@@ -30,7 +30,7 @@ app.post("/cadastrar", async (req, resp) => {
       let r = await db.infoc_ntc_usuario.create({
         nm_usuario: nome,
         ds_email: email,
-        ds_senha: senha,
+        ds_senha: crypto.SHA256(senha).toString(crypto.enc.Base64),
         ds_cpf: cpf,
         ds_telefone: telefone,
       });
@@ -52,8 +52,9 @@ app.post("/cadastrar", async (req, resp) => {
 app.post("/login", async (req, resp) => {
   try {
     let { email, senha } = req.body;
+    let descrypto = crypto.SHA256(senha).toString(crypto.enc.Base64)
     let valido = await db.infoc_ntc_usuario.findOne({
-      where: { 'ds_email': email, 'ds_senha': senha },
+      where: { 'ds_email': email, 'ds_senha': descrypto },
       attributes:[
         ['id_usuario', 'idUsu'],
         ["nm_usuario", "nome"],
