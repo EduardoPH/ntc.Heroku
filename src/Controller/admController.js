@@ -10,6 +10,7 @@ function retornoDenuncia() {
     ["ds_depoimento", "depoimento"],
     ["dt_cadastro", "data"],
     ["bt_ativo", "ativo"],
+    ["id_usuario", "idUsu"]
   ];
 }
 function fkDenuncia() {
@@ -18,6 +19,7 @@ function fkDenuncia() {
       model: db.infoc_ntc_usuario,
       as: "id_usuario_infoc_ntc_usuario",
       attributes: [
+        ['id_usuario', 'idUsu'],
         ["nm_usuario", "nome"],
         ["ds_email", "email"],
         ["ds_telefone", "telefone"],
@@ -103,15 +105,17 @@ app.put("/denuncia/:id", async (req, resp) => {
   }
 });
 app.delete("/denuncia/:id", async (req, resp) => {
-  let { id } = req.params;
-
-  let denuncia = await db.infoc_ntc_denuncia.destroy({
-    where: { id_denuncia: id },
-  });
-
-  if (denuncia !== "OK") return resp.send({ erro: "Houve um erro ao excluir" });
-
-  resp.sendStatus(200);
+  
+  try {
+    let { id } = req.params;
+    let denuncia = await db.infoc_ntc_denuncia.destroy({
+      where: { id_denuncia: id },
+    });
+    resp.sendStatus(200);    
+  } catch (e) {
+      resp.send({erro: 'Não foi possível excluir esta denúncia'})
+  }
+  
 });
 
 
@@ -336,7 +340,8 @@ app.get('/buscarUsuario/:id', async(req, resp) =>{
     let { id } = req.params
     
     let r = await db.infoc_ntc_usuario.findOne({
-      where:{'id_usuario': id}
+      where:{'id_usuario': id},
+      attributes: retornoUsuario()
     })
 
     if(!r)
@@ -368,7 +373,8 @@ app.get('/buscarDenuncia/:id', async(req, resp) =>{
     let { id } = req.params
     
     let r = await db.infoc_ntc_denuncia.findAll({
-      where: {'id_usuario': id}
+      where: {'id_usuario': id},
+      attributes: retornoDenuncia()
     })
 
     resp.send(r)
