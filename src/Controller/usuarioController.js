@@ -27,8 +27,6 @@ app.post("/cadastrar", async (req, resp) => {
       if (senha.length <= 4)
         return resp.send({ erro: "A senha deve Maior que 4 digitos" });
       
-      
-  
       let r = await db.infoc_ntc_usuario.create({
         nm_usuario: nome,
         ds_email: email,
@@ -36,7 +34,15 @@ app.post("/cadastrar", async (req, resp) => {
         ds_cpf: cpf,
         ds_telefone: telefone,
       });
-      resp.send(r);
+
+      let c = {
+        "nome": r.nm_usuario,
+        "email": r.ds_email,
+        "cpf": r.ds_cpf,
+        "telefone": r.ds_telefone,
+      }
+
+      resp.send(c);
     } catch (e) {
       resp.send(e.toString());
     }
@@ -46,15 +52,8 @@ app.post("/cadastrar", async (req, resp) => {
 app.post("/login", async (req, resp) => {
   try {
     let { email, senha } = req.body;
-    
-    let regexEmail =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    if (regexEmail.test(email) === false)
-        return resp.send({ erro: "O E-mail deve ser valido" });
-
     let valido = await db.infoc_ntc_usuario.findOne({
-      where: { ds_email: email, ds_senha: senha },
+      where: { 'ds_email': email, 'ds_senha': senha },
       attributes:[
         ['id_usuario', 'idUsu'],
         ["nm_usuario", "nome"],
@@ -63,7 +62,6 @@ app.post("/login", async (req, resp) => {
         ["ds_cpf", "cpf"],
       ]
     });
-
     if (!valido)
       return resp.send({erro: "Credenciais invalidas"})
     
