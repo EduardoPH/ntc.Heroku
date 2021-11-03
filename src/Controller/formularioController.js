@@ -4,9 +4,7 @@ import  Router  from 'express'
 const app = Router();
 
 app.post('/buscarUsu', async (req, resp) => {
-    const {nomeUsu}= req.body;
-
-   
+    const { nomeUsu } = req.body;
     let r = await db.infoc_ntc_usuario.findOne({
         where: {'nm_usuario' : nomeUsu},
         attributes: [['id_usuario', 'idUsu']]
