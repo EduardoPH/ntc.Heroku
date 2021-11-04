@@ -326,6 +326,7 @@ app.post("/login", async(req, resp) =>{
 app.get('/usuarios', async(req, resp) =>{    
     try{
         let r = await db.infoc_ntc_usuario.findAll({
+          attributes: retornoUsuario(),
         })
         resp.send(r)
     } catch(e){
