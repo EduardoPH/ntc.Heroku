@@ -46,7 +46,7 @@ app.post('/', async (req, resp) => {
 
         resp.send({mensagem: 'Denuncia cadastrada'})
     } catch (e) {
-        resp.send({erro: 'Houve um erro durante o cadastro'})
+        resp.send({erro: 'Houve um erro durante o cadastro, todos os campos devem ser preenchidos!'})
     }
 })
 app.put('/', async (req, resp) => {
@@ -94,7 +94,7 @@ app.put('/', async (req, resp) => {
 
         resp.send({mensagem: 'Denuncia cadastrada'})
     } catch (e) {
-        resp.send({erro: 'Houve um erro durante o cadastro'})
+        resp.send({erro: 'Houve um erro durante o cadastro, todos os campos devem ser preenchidos!'})
     }
 })
 

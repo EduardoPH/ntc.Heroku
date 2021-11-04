@@ -15,7 +15,7 @@ app.post("/cadastrar", async (req, resp) => {
       if (nome.replace(/( )+/g, '') == "" || nome.length < 4)
         return resp.send({ erro: "O nome deve ser maior que 4 Digitos" });
   
-      if (telefone.replace(/( )+/g, '') == "" || isNaN(telefone))
+      if (telefone.replace(/( )+/g, '') == "" || isNaN(telefone ) || telefone.length < 11)
         return resp.send({ erro: "o telefone deve ser valido" });
   
       let regexEmail =

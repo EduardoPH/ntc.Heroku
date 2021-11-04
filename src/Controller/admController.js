@@ -159,6 +159,8 @@ app.post("/apoio", async (req, resp) => {
   try {
     let { frase } = req.body
 
+    if (frase.replace(/( )+/g, '') == "")
+        return resp.send({ erro: "Frase inválida"})
     let frasesCadastradas = await db.infoc_ntc_apoio_frase.findOne({
       where: { 
           'ds_frase': frase 
