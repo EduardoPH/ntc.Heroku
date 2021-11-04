@@ -120,6 +120,19 @@ app.delete("/denuncia/:id", async (req, resp) => {
   }
   
 });
+app.delete("/usuario/:id", async (req, resp) => {
+  try {
+    let { id } = req.params;
+    
+    let r = await db.infoc_ntc_usuario.destroy({ where: { id_usuario: id } });
+    
+    resp.sendStatus(200);
+    
+  } catch (e) {
+    resp.send({ erro: "Ocorreu um erro" });
+  }
+});
+
 
 
 
