@@ -34,6 +34,7 @@ function fkDenuncia() {
         ["ds_inferior", "partInferior"],
         ["ds_superior", "partSuperior"],
         ["ds_calcado", "calcado"],
+        ["ds_complemento", "complemento"]
       ],
       required: true,
     },
@@ -54,6 +55,8 @@ function fkDenuncia() {
       attributes: [
         ["ds_latitude", "lat"],
         ["ds_longitude", "lgn"],
+        ["ds_cidade", "cidade"],
+        ["ds_bairro", "bairro"]
       ],
       required: true,
     },
@@ -374,7 +377,8 @@ app.get('/buscarDenuncia/:id', async(req, resp) =>{
     
     let r = await db.infoc_ntc_denuncia.findAll({
       where: {'id_usuario': id},
-      attributes: retornoDenuncia()
+      attributes: retornoDenuncia(),
+      include: fkDenuncia()
     })
 
     resp.send(r)
