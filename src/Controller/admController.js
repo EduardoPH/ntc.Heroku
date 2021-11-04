@@ -34,6 +34,7 @@ function fkDenuncia() {
         ["ds_inferior", "partInferior"],
         ["ds_superior", "partSuperior"],
         ["ds_calcado", "calcado"],
+        ["ds_complemento", "complemento"]
       ],
       required: true,
     },
@@ -54,6 +55,8 @@ function fkDenuncia() {
       attributes: [
         ["ds_latitude", "lat"],
         ["ds_longitude", "lgn"],
+        ["ds_cidade", "cidade"],
+        ["ds_bairro", "bairro"]
       ],
       required: true,
     },
@@ -117,6 +120,19 @@ app.delete("/denuncia/:id", async (req, resp) => {
   }
   
 });
+app.delete("/usuario/:id", async (req, resp) => {
+  try {
+    let { id } = req.params;
+    
+    let r = await db.infoc_ntc_usuario.destroy({ where: { id_usuario: id } });
+    
+    resp.sendStatus(200);
+    
+  } catch (e) {
+    resp.send({ erro: "Ocorreu um erro" });
+  }
+});
+
 
 
 
@@ -326,6 +342,7 @@ app.post("/login", async(req, resp) =>{
 app.get('/usuarios', async(req, resp) =>{    
     try{
         let r = await db.infoc_ntc_usuario.findAll({
+          attributes: retornoUsuario(),
         })
         resp.send(r)
     } catch(e){
@@ -373,7 +390,8 @@ app.get('/buscarDenuncia/:id', async(req, resp) =>{
     
     let r = await db.infoc_ntc_denuncia.findAll({
       where: {'id_usuario': id},
-      attributes: retornoDenuncia()
+      attributes: retornoDenuncia(),
+      include: fkDenuncia()
     })
 
     resp.send(r)
