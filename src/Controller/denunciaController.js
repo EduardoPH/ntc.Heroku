@@ -50,7 +50,8 @@ app.get('/', async (req, resp) => {
     let value = await db.infoc_ntc_denuncia.findAll({
       include: DenunFilter(),
       attributes: [
-        ['ds_depoimento', 'msg']
+        ['ds_depoimento', 'msg'],
+        ['bt_ativo', 'ativo']
       ]
     })
     resp.send(value)
