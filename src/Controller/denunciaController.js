@@ -52,7 +52,8 @@ app.get('/', async (req, resp) => {
       attributes: [
         ['ds_depoimento', 'msg'],
         ['bt_ativo', 'ativo']
-      ]
+      ],
+      order: [["id_denuncia", "desc"]]
     })
     resp.send(value)
   } catch (e) {
