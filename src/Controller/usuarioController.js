@@ -36,6 +36,7 @@ app.post("/cadastrar", async (req, resp) => {
       });
 
       let c = {
+        "idUsu": r.id_usuario,
         "nome": r.nm_usuario,
         "email": r.ds_email,
         "cpf": r.ds_cpf,
