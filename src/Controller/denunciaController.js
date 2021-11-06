@@ -19,6 +19,7 @@ function DenunFilter() {
         ["ds_inferior", "partInferior"],
         ["ds_superior", "partSuperior"],
         ["ds_calcado", "calcado"],
+        ['ds_complemento', 'complemento']
       ],
       required: true,
     },
