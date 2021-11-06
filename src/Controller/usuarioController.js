@@ -13,19 +13,19 @@ app.post("/cadastrar", async (req, resp) => {
       let {nome, email, senha, telefone, cpf} = req.body;
 
       if (nome.replace(/( )+/g, '') == "" || nome.length < 4)
-        return resp.send({ erro: "O nome deve ser maior que 4 Digitos" });
+        return resp.send({ erro: "O nome deve ser maior que 4 dígitos" });
   
-      if (telefone.replace(/( )+/g, '') == "" || isNaN(telefone ) || telefone.length < 11)
-        return resp.send({ erro: "o telefone deve ser valido" });
+      if (telefone.replace(/( )+/g, '') == "" || isNaN(telefone ) || telefone.length < 9)
+        return resp.send({ erro: "o telefone deve ser válido" });
   
       let regexEmail =
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   
       if (regexEmail.test(email) === false)
-        return resp.send({ erro: "O E-mail deve ser valido" });
+        return resp.send({ erro: "O E-mail deve ser válido" });
   
       if (senha.length <= 4)
-        return resp.send({ erro: "A senha deve Maior que 4 digitos" });
+        return resp.send({ erro: "A senha deve ser maior que 4 dígitos" });
       
       let r = await db.infoc_ntc_usuario.create({
         nm_usuario: nome,
@@ -64,7 +64,7 @@ app.post("/login", async (req, resp) => {
       ]
     });
     if (!valido)
-      return resp.send({erro: "Credenciais invalidas"})
+      return resp.send({erro: "Credenciais inválidas"})
     
     resp.send(valido);
   } catch (e) {
@@ -161,52 +161,40 @@ app.post("/validarCodigo", async (req, resp) => {
 
 app.put("/novaSenha", async (req, resp) => {
 
-  let { email, senha, codigo } = req.body
+ try {
+ 
+    let { email, senha, codigo } = req.body
+    
+    const usuaria = await db.infoc_ntc_usuario.findOne({
+      where: { 'ds_email': email }
+    });
 
-  const usuaria = await db.infoc_ntc_usuario.findOne({
-    where: { ds_email: email },
-  });
-
-  if (!usuaria) {
-    return resp.send({ erro: "E-mail inválido." });
-  }
-
-  if (usuaria.ds_senha_rec !== codigo || usuaria.ds_senha_rec === "") {
-    return resp.send({ erro: "Código inválido." });
-  }
-
-  await db.infoc_ntc_usuario.update(
-    {
-      ds_senha: senha,
-      ds_senha_rec: "",
-    },
-    {
-      where: { id_usuario: usuaria.id_usuario },
+    if (!usuaria) {
+      return resp.send({ erro: "E-mail inválido." });
     }
-  );
 
-  resp.send("Senha alterada com sucesso.");
+    if (usuaria.ds_senha_rec !== codigo || usuaria.ds_senha_rec === "") {
+      return resp.send({ erro: "Código inválido." });
+    }
+
+    let r = await db.infoc_ntc_usuario.update(
+      {
+        'ds_senha': crypto.SHA256(senha).toString(crypto.enc.Base64),
+        'ds_senha_rec': "",
+      },
+      {
+        where: { 'id_usuario': usuaria.id_usuario },
+      }
+    );
+    console.log(r)
+    resp.send("Senha alterada com sucesso.");
+    
+ } catch (e) {
+    resp.send(e.toString())
+ }
 });
 
 
 
 
-
-
-
-
 export default app
-
-
-
-
-
-
-
-
-
-
-
-
-
-

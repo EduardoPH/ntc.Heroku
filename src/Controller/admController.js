@@ -87,7 +87,7 @@ app.get("/denuncia", async (req, resp) => {
     });
     resp.send(JSON.stringify(denuncias[0]));
   } catch (e) {
-    resp.send({ erro: "Não foi possível listar as Denuncias" });
+    resp.send({ erro: "Não foi possível listar as denúncias" });
   }
 });
 app.put("/denuncia/:id", async (req, resp) => {
@@ -104,7 +104,7 @@ app.put("/denuncia/:id", async (req, resp) => {
     if (denuncia === 1) return resp.send({ retorno: "Validada com sucesso" });
     else return resp.send({ retorno: "Houve um erro na Validação" });
   } catch (e) {
-    resp.send({ erro: "Não foi possivel cadastrar a denuncia" });
+    resp.send({ erro: "Não foi possível cadastrar a denúncia" });
   }
 });
 app.delete("/denuncia/:id", async (req, resp) => {
@@ -363,12 +363,12 @@ app.get('/buscarUsuario/:id', async(req, resp) =>{
     })
 
     if(!r)
-      return resp.send({erro: 'Usuario não encontrado'})
+      return resp.send({erro: 'Usuário não encontrado'})
     
     resp.send(r)
 
   } catch (e) {
-    resp.send({erro: 'Não foi possível encontrar as denuncias deste Usuario'})
+    resp.send({erro: 'Não foi possível encontrar as denúncias deste Usuario'})
   }
 })
 
