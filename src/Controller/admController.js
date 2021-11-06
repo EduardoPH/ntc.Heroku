@@ -31,6 +31,7 @@ function fkDenuncia() {
       model: db.infoc_ntc_vestimento,
       as: "vestimento", 
       attributes: [
+        ["id_vestimento","id"],
         ["ds_inferior", "partInferior"],
         ["ds_superior", "partSuperior"],
         ["ds_calcado", "calcado"],
@@ -42,6 +43,7 @@ function fkDenuncia() {
       model: db.infoc_ntc_caracteristica_fisica,
       as: "id_fisico_infoc_ntc_caracteristica_fisica",
       attributes: [
+        ["id_fisico","id"],
         ["ds_pele", "pele"],
         ["ds_cabelo", "cabelo"],
         ["ds_cor_cabelo", "corCabelo"],
@@ -53,6 +55,7 @@ function fkDenuncia() {
       model: db.infoc_ntc_local,
       as: "id_local_infoc_ntc_local",
       attributes: [
+        ["id_local","id"],
         ["ds_latitude", "lat"],
         ["ds_longitude", "lgn"],
         ["ds_cidade", "cidade"],
