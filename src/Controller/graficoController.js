@@ -10,9 +10,9 @@ app.get("/", async (req, resp) => {
     const data = await db.infoc_ntc_local.findAll({
       group: [col("infoc_ntc_local.ds_bairro")],
       attributes: ["ds_bairro", [fn("count", "ds_bairro"), "qtd"]],
-      order: ['qrd', 'DESC'],
+      order: [[ Sequelize.literal('qtd'), 'DESC']],
       limit: 5
-    } );
+    });
     resp.send(data);
   } catch (e) {
     resp.send(e.toString());
@@ -24,7 +24,7 @@ app.get("/Cidades", async (req, resp) => {
     const data = await db.infoc_ntc_local.findAll({
       group: [col("infoc_ntc_local.ds_cidade")],
       attributes: ["ds_cidade", [fn("count", "ds_cidade"), "qtd"]],
-      order: ['qrd', 'DESC'],
+      order: [[ Sequelize.literal('qtd'), 'DESC']],
       limit: 5
     });
     resp.send(data);
