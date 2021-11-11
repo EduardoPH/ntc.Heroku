@@ -12,7 +12,7 @@ app.post('/', async (req, resp) => {
             where: {'ds_depoimento': dados.depoimento}
         })
 
-        if(cadastrados !== undefined)
+        if(!cadastrados)
             return resp.send({erro: "Já cadastrada"})
 
         let usuario = dados.usu
