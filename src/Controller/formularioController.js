@@ -7,6 +7,13 @@ app.post('/', async (req, resp) => {
 
     try {
         let { dados } = req.body;
+    
+        let cadastrados = await db.infoc_ntc_denuncia.findOne({
+            where: {'ds_depoimento': dados.depoimento}
+        })
+
+        if(cadastrados !== undefined)
+            return resp.send({erro: "Já cadastrada"})
 
         let usuario = dados.usu
         let caracteristicas = dados.caracteristicas
