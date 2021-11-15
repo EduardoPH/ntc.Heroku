@@ -98,7 +98,7 @@ app.put("/denuncia/:id", async (req, resp) => {
     let { id } = req.params;
     let { depoimento } = req.body;
     
-    if( depoimento === "" )
+    if( depoimento.replace(/( )+/g, '') == '') 
        return resp.send({ erro: "Não foi possível cadastrar a denúncia" })
     
     let denuncia = await db.infoc_ntc_denuncia.update(
