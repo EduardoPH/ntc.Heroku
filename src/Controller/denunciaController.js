@@ -10,6 +10,7 @@ function DenunFilter() {
       as: "id_usuario_infoc_ntc_usuario",
       attributes: [
         ['nm_usuario', 'nome'],
+        ['id_usuario', 'id']
       ]
     },
     {
