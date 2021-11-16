@@ -53,7 +53,8 @@ app.get('/', async (req, resp) => {
       include: DenunFilter(),
       attributes: [
         ['ds_depoimento', 'depoimento'],
-        ['bt_ativo', 'ativo']
+        ['bt_ativo', 'ativo'],
+        ['id_denuncia', 'id']
       ],
       order: [["id_denuncia", "desc"]]
     })
