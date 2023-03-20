@@ -25,7 +25,7 @@ server.use('/apoio', ApoioController)
 server.use('/formulario', FormularioController)
 
 server.listen(process.env.PORT || 3030, (r) =>
-  console.log(`API subiu na porta ${process.env.PORT}`)
+  console.log(`API subiu na porta ${process.env.PORT || 3030}`)
 );
 
 export default server;
