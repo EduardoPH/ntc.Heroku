@@ -24,6 +24,8 @@ server.use('/usuario', UsuarioController)
 server.use('/apoio', ApoioController)
 server.use('/formulario', FormularioController)
 
-server.listen(process.env.PORT, (r) =>
+server.listen(process.env.PORT || 3030, (r) =>
   console.log(`API subiu na porta ${process.env.PORT}`)
 );
+
+export default server;
