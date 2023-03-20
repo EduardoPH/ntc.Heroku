@@ -15,11 +15,13 @@
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
     "express": "^4.17.1",
-    "mysql2": "^2.3.3",
     "nodemailer": "^6.7.0",
     "nodemon": "^2.0.12",
     "sequelize": "^6.6.5",
     "sequelize-auto": "^0.8.4",
     "vercel": "^28.17.0"
+  },
+  "devDependencies": {
+    "mysql2": "^3.2.0"
   }
 }
