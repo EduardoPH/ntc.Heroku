@@ -1,14 +1,10 @@
 {
   "version": 2,
+  "public": true,
   "builds": [
-    { "src": "index.js", "use": "@vercel/node" }
+    { "src": "src/index.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/Administrador", "dest": "/Administrador" },
-    { "src": "/Denuncia", "dest": "/Denuncia" },
-    { "src": "/estatisticas", "dest": "/estatisticas" },
-    { "src": "/usuario", "dest": "/usuario" },
-    { "src": "/apoio", "dest": "/apoio" },
-    { "src": "/formulario", "dest": "/formulario" }
+    { "src": "/(.*)", "dest": "src/" }
   ]
 }
